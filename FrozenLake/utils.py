@@ -1,3 +1,4 @@
+import math
 import numpy as np
 import contextlib2 as contextlib
 
@@ -14,6 +15,11 @@ def _printoptions(*args, **kwargs):
 def load_npy_file():
     data = np.load('p.npy')
     return data
+
+def get_grid_position_from_state(state, rows, columns):
+    x = state % columns
+    y = math.floor(state / rows)
+    return x, y
 
 def play(env):
     actions = ['w', 'a', 's', 'd']

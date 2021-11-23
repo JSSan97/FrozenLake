@@ -1,6 +1,7 @@
 import numpy as np
 from Environment import Environment
-from utils import _printoptions
+from utils import _printoptions, get_grid_position_from_state
+
 
 class FrozenLake(Environment):
     def __init__(self, lake, slip, max_steps, seed=None):
@@ -27,7 +28,17 @@ class FrozenLake(Environment):
         self.absorbing_state = n_states - 1
 
         # TODO:
-        Environment.__init__(self, n_states, n_actions, seed, pi)
+        Environment.__init__(self, n_states, n_actions, max_steps, pi, seed)
+
+        self.lake_rows, self.lake_columns = self.lake.shape
+
+        # 0 = Up, 1 = Left, 2 = Down, 3 = Right
+        self.action_state_difference = {
+            0: {'x': 0, 'y': -1},
+            1: {'x': -1, 'y': 0},
+            2: {'x': 0, 'y': 1},
+            3: {'x': 1, 'y': 0}
+        }
 
     def step(self, action):
         state, reward, done = Environment.step(self, action)
@@ -36,12 +47,69 @@ class FrozenLake(Environment):
         return state, reward, done
 
     def p(self, next_state, state, action):
-        # TODO:
-        raise NotImplementedError()
+        p = 0
+        current_position_x, current_position_y = get_grid_position_from_state(state, self.lake_rows, self.lake_columns)
+        next_state_position_x, next_state_position_y = get_grid_position_from_state(next_state, self.lake_rows,
+                                                                                    self.lake_columns)
+
+        ## Upon taking an action at the goal or in a hole, the agent moves into the absorbing state.
+        if self.lake.flat[state] == '$' or self.lake.flat[state] == '#':
+            if next_state == self.absorbing_state:
+                return 1
+            else:
+                return 0
+
+        ## Every action taken at the absorbing state leads to the absorbing state
+        if state == self.absorbing_state and next_state == self.absorbing_state:
+            return 1
+
+        # An action that would cause the agent to move outside the grid leaves the state unchanged.
+        after_moving_position_x = current_position_x + self.action_state_difference.get(action).get('x')
+        after_moving_position_y = current_position_y + self.action_state_difference.get(action).get('y')
+        if (after_moving_position_x < 0 or after_moving_position_y < 0
+                or after_moving_position_y >= self.lake_rows or after_moving_position_x >= self.lake_columns):
+            if state == next_state:
+                return 1
+            else:
+                return 0
+
+        ## Check if walls nearby.
+        walls = 0
+        if current_position_x == 0:
+            walls += 1
+        if current_position_x == self.lake_columns - 1:
+            walls += 1
+        if current_position_y == 0:
+            walls += 1
+        if current_position_y == self.lake_rows - 1:
+            walls += 1
+
+        ## The environment has a chance of ignoringt he desired direction and the agent slips (move a random direction)
+        ## Check all directions to see if the next state is adjacent to the current state.
+        for a in range(self.n_actions):
+            if next_state != self.absorbing_state:
+                after_moving_position_x = current_position_x + self.action_state_difference.get(a).get('x')
+                after_moving_position_y = current_position_y + self.action_state_difference.get(a).get('y')
+
+                if next_state_position_x == after_moving_position_x and \
+                        next_state_position_y == after_moving_position_y:
+
+                    p = (self.slip / (self.n_actions - walls))
+
+                    ## if it is intended action
+                    if a == action:
+                        p += 1 - self.slip
+
+        return p
 
     def r(self, next_state, state, action):
-        # TODO:
-        raise NotImplementedError()
+        r = 0
+
+        # The agent receives reward 1 upon taking an action at the goal.
+        if self.lake.flat[state] == '$':
+            r = 1
+
+        return r
 
     def render(self, policy=None, value=None):
         if policy is None:
@@ -51,16 +119,14 @@ class FrozenLake(Environment):
                 lake[self.state] = '@'
 
                 print(lake.reshape(self.lake.shape))
-            else:
-                actions = ['^', '<', '_', '>']
-                print('Lake:')
-                print(self.lake)
-                print('Policy:')
-                policy = np.array([actions[a] for a in policy[:-1]])
-                print(policy.reshape(self.lake.shape))
+        else:
+            actions = ['^', '<', '_', '>']
+            print('Lake:')
+            print(self.lake)
+            print('Policy:')
+            policy = np.array([actions[a] for a in policy[:-1]])
+            print(policy.reshape(self.lake.shape))
 
-                print('Value:')
-                with _printoptions(precision=3, suppress=True):
-                    print(value[:-1].reshape(self.lake.shape))
-
-
+            print('Value:')
+            with _printoptions(precision=3, suppress=True):
+                print(value[:-1].reshape(self.lake.shape))
