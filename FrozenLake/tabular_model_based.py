@@ -67,7 +67,7 @@ def policy_iteration(env, gamma, theta, max_iterations, policy=None):
     return policy, value
 
 
-def value_iteration(env, gamma, theta, max_iterations, value):
+def value_iteration(env, gamma, theta, max_iterations, value=None):
     if value is None:
         value = np.zeros(env.n_states, dtype=float)
     else:

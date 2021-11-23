@@ -13,7 +13,9 @@ def _printoptions(*args, **kwargs):
         np.set_printoptions(**original)
 
 def load_npy_file():
+    np.set_printoptions(threshold=np.inf)
     data = np.load('p.npy')
+    print(type(data))
     return data
 
 def get_grid_position_from_state(state, rows, columns):

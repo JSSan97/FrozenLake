@@ -33,7 +33,9 @@ def main():
     policy, value = value_iteration(env, gamma, theta, max_iterations)
     env.render(policy, value)
 
-    print('')
+    # print('')
+    # print('## Numpy file')
+    # print(load_npy_file())
 
 
 main()
