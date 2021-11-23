@@ -12,7 +12,7 @@ def main():
             ['#', '.', '.', '$']]
 
     env = FrozenLake(lake, slip=0.1, max_steps=16, seed=seed)
-    env.play()
+    play(env)
 
 
 main()
