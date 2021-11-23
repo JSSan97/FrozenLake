@@ -52,6 +52,13 @@ class FrozenLake(Environment):
         next_state_position_x, next_state_position_y = get_grid_position_from_state(next_state, self.lake_rows,
                                                                                     self.lake_columns)
 
+        ## Every action taken at the absorbing state leads to the absorbing state
+        if state == self.absorbing_state:
+            if next_state == self.absorbing_state:
+                return 1
+            else:
+                return 0
+
         ## Upon taking an action at the goal or in a hole, the agent moves into the absorbing state.
         if self.lake.flat[state] == '$' or self.lake.flat[state] == '#':
             if next_state == self.absorbing_state:
@@ -59,9 +66,6 @@ class FrozenLake(Environment):
             else:
                 return 0
 
-        ## Every action taken at the absorbing state leads to the absorbing state
-        if state == self.absorbing_state and next_state == self.absorbing_state:
-            return 1
 
         # An action that would cause the agent to move outside the grid leaves the state unchanged.
         after_moving_position_x = current_position_x + self.action_state_difference.get(action).get('x')
@@ -106,8 +110,9 @@ class FrozenLake(Environment):
         r = 0
 
         # The agent receives reward 1 upon taking an action at the goal.
-        if self.lake.flat[state] == '$':
-            r = 1
+        if state != self.absorbing_state:
+            if self.lake.flat[state] == '$':
+                r = 1
 
         return r
 
