@@ -12,26 +12,26 @@ def main():
             ['.', '.', '.', '#'],
             ['#', '.', '.', '$']]
 
-    env = FrozenLake(lake, slip=0.1, max_steps=16, seed=seed)
+    env = FrozenLake(lake, slip=0.1, max_steps=200, seed=seed)
     env.reset()
-    #play(env)
+    play(env)
 
-    print('# Model-based algorithms')
-    gamma = 0.9
-    theta = 0.001
-    max_iterations = 100
-
-    print('')
-
-    print('## Policy iteration')
-    policy, value = policy_iteration(env, gamma, theta, max_iterations)
-    env.render(policy, value)
-
-    print('')
-
-    print('## Value iteration')
-    policy, value = value_iteration(env, gamma, theta, max_iterations)
-    env.render(policy, value)
+    # print('# Model-based algorithms')
+    # gamma = 0.9
+    # theta = 0.001
+    # max_iterations = 100
+    #
+    # print('')
+    #
+    # print('## Policy iteration')
+    # policy, value = policy_iteration(env, gamma, theta, max_iterations)
+    # env.render(policy, value)
+    #
+    # print('')
+    #
+    # print('## Value iteration')
+    # policy, value = value_iteration(env, gamma, theta, max_iterations)
+    # env.render(policy, value)
 
     # print('')
     # print('## Numpy file')

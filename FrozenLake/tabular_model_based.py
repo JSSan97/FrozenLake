@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def policy_evaluation(env, policy, gamma, theta, max_iterations):
+def policy_evaluation(env, policy, gamma, theta, max_iterations=100):
     # Initialise the value function
     values = np.zeros(env.n_states, float)
 
@@ -17,8 +17,8 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
             # We would usually have a loop of all actions and probabilities but in grid world
             # there is only 1 action with 100% probability leading to a state (we are using deterministic policy)
             env.state = s
-            next_state, reward, done = env.step(policy[s])
-            v += env.p(next_state, s, policy[s]) * (reward + (gamma * values[next_state]))
+            s_1, reward, done = env.step(policy[s])
+            v += env.p(s_1, s, policy[s]) * (reward + (gamma * values[s_1]))
 
             delta = max(delta, np.abs(v - values[s]))
             values[s] = v
@@ -31,8 +31,10 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
     return values
 
 
-def policy_improvement(env, value, gamma):
-    policy = np.zeros(env.n_states, dtype=int)
+def policy_improvement(env, policy, policy_eval, gamma=1):
+    improved_policy = policy
+
+    V = policy_eval
 
     for s in range(env.n_states):
         # Find the best action by one-step lookahead
@@ -40,47 +42,40 @@ def policy_improvement(env, value, gamma):
 
         for action in range(env.n_actions):
             env.state = s
-            next_state, reward, done = env.step(action)
-            action_values[action] += env.p(next_state, s, action) * (reward + (gamma * value[next_state]))
+            s_1, reward, done = env.step(action)
+            action_values[action] += env.p(s_1, s, action) * (reward + (gamma * V[s_1]))
 
         best_action = np.argmax(action_values)
-        policy[s] = best_action
+        improved_policy[s] = best_action
 
-    return policy
+    return improved_policy
 
-
-def policy_iteration(env, gamma, theta, max_iterations, policy=None):
-    if policy is None:
-        policy = np.zeros(env.n_states, dtype=int)
-    else:
-        policy = np.array(policy, dtype=int)
+def policy_iteration(env, gamma, theta, max_iterations):
+    policy = np.zeros(env.n_states, dtype=int)
+    value = np.zeros(env.n_states, dtype=float)
 
     current_iterations = 0
-    value = policy_evaluation(env, policy, gamma, theta, max_iterations)
+    value = policy_evaluation(env, policy, gamma, theta)
     while current_iterations < max_iterations:
-        policy = policy_improvement(env, value, gamma)
-        value = policy_evaluation(env, policy, gamma, theta, max_iterations)
+        policy = policy_improvement(env, policy, value, gamma)
+        value = policy_evaluation(env, policy, gamma, theta)
         current_iterations += 1
+
 
     return policy, value
 
-
-def value_iteration(env, gamma, theta, max_iterations, value=None):
-    if value is None:
-        value = np.zeros(env.n_states, dtype=float)
-    else:
-        value = np.array(value, dtype=float)
-
-    current_iterations = 0
+def value_iteration(env, gamma, theta, max_iterations):
     policy = np.zeros(env.n_states, dtype=int)
+    value = np.zeros(env.n_states, dtype=float)
+    current_iterations = 0
 
     def get_action_values(state, V):
         # Get best action
         action_values = np.zeros(env.n_actions)
         for action in range(env.n_actions):
             env.state = state
-            next_state, reward, done = env.step(action)
-            action_values[action] += env.p(next_state, state, action) * (reward + (gamma * V[next_state]))
+            s_1, reward, done = env.step(action)
+            action_values[action] += env.p(s_1, state, action) * (reward + (gamma * V[s_1]))
 
         return action_values
 

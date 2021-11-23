@@ -66,43 +66,48 @@ class FrozenLake(Environment):
             else:
                 return 0
 
+        # ## Check if walls nearby.
+        # walls = 0
+        # if current_position_x == 0:
+        #     walls += 1
+        # if current_position_x == self.lake_columns - 1:
+        #     walls += 1
+        # if current_position_y == 0:
+        #     walls += 1
+        # if current_position_y == self.lake_rows - 1:
+        #     walls += 1
 
-        # An action that would cause the agent to move outside the grid leaves the state unchanged.
+        # When you intend to hit a wall
         after_moving_position_x = current_position_x + self.action_state_difference.get(action).get('x')
         after_moving_position_y = current_position_y + self.action_state_difference.get(action).get('y')
         if (after_moving_position_x < 0 or after_moving_position_y < 0
                 or after_moving_position_y >= self.lake_rows or after_moving_position_x >= self.lake_columns):
             if state == next_state:
-                return 1
-            else:
-                return 0
+                p = (1 - self.slip)
 
-        ## Check if walls nearby.
-        walls = 0
-        if current_position_x == 0:
-            walls += 1
-        if current_position_x == self.lake_columns - 1:
-            walls += 1
-        if current_position_y == 0:
-            walls += 1
-        if current_position_y == self.lake_rows - 1:
-            walls += 1
+        if next_state_position_x == after_moving_position_x and \
+                next_state_position_y == after_moving_position_y:
+            p = (1 - self.slip)
 
-        ## The environment has a chance of ignoringt he desired direction and the agent slips (move a random direction)
-        ## Check all directions to see if the next state is adjacent to the current state.
+
+        ## The environment has a chance of ignoring the desired direction and the agent slips (move a random direction)
+        ## Check all directions to see if the next state is adjacent to the current state, regardless of action
         for a in range(self.n_actions):
             if next_state != self.absorbing_state:
                 after_moving_position_x = current_position_x + self.action_state_difference.get(a).get('x')
                 after_moving_position_y = current_position_y + self.action_state_difference.get(a).get('y')
 
+                if (after_moving_position_x < 0 or after_moving_position_y < 0 or
+                        after_moving_position_y >= self.lake_rows or after_moving_position_x >= self.lake_columns):
+                    if state == next_state:
+                        ## If I can't go to the state because I hit a wall, the slip chance goes for the state I am on.
+                        p += (self.slip / (self.n_actions))
+
+                # If I am able to go to the state, no walls are hit, add the 'additional slip chance
                 if next_state_position_x == after_moving_position_x and \
                         next_state_position_y == after_moving_position_y:
 
-                    p = (self.slip / (self.n_actions - walls))
-
-                    ## if it is intended action
-                    if a == action:
-                        p += 1 - self.slip
+                    p += (self.slip / (self.n_actions))
 
         return p
 
