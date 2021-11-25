@@ -101,7 +101,7 @@ class FrozenLake(Environment):
         return p
 
     def p_transitions(self, next_state, state, action):
-        load_npy_file
+        
         p = 0
         return p
 
