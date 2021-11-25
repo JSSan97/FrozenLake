@@ -15,7 +15,6 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
         for s in range(env.n_states):
             v = 0
             for s_1 in range(env.n_states):
-                env.state = s
                 probability = env.p(s_1, s, policy[s])
                 reward = env.r(s_1, s, policy[s])
                 v += probability * (reward + (gamma * values[s_1]))
@@ -40,12 +39,12 @@ def policy_improvement(env, policy, value, gamma=1):
 
         for action in range(env.n_actions):
             for next_state in range(env.n_states):
-                env.state = s
+                probability = env.p(next_state, s, action)
                 reward = env.r(next_state, s, action)
-                action_values[action] += env.p(next_state, s, action) * (reward + (gamma * value[next_state]))
+                action_values[action] += probability * (reward + (gamma * value[next_state]))
 
-        best_action = np.argmax(action_values)
-        policy[s] = best_action
+            best_action = np.argmax(action_values)
+            policy[s] = best_action
 
     return improved_policy
 
