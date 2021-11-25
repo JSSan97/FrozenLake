@@ -1,6 +1,6 @@
 import numpy as np
 from Environment import Environment
-from utils import _printoptions, get_grid_position_from_state
+from utils import _printoptions, get_grid_position_from_state, load_npy_file
 
 
 class FrozenLake(Environment):
@@ -101,8 +101,10 @@ class FrozenLake(Environment):
         return p
 
     def p_transitions(self, next_state, state, action):
-        
-        p = 0
+        # Use this instead of P if we think our transitions are wrong.
+        data = load_npy_file()
+        p = data[next_state][state][action]
+
         return p
 
     def r(self, next_state, state, action):
