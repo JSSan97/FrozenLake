@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def policy_evaluation(env, policy, gamma, theta, max_iterations=100):
+def policy_evaluation(env, policy, gamma, theta, max_iterations=70):
     # Initialise the value function
     values = np.zeros(env.n_states, float)
 
@@ -31,10 +31,8 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations=100):
     return values
 
 
-def policy_improvement(env, policy, policy_eval, gamma=1):
+def policy_improvement(env, policy, value, gamma=1):
     improved_policy = policy
-
-    V = policy_eval
 
     for s in range(env.n_states):
         # Find the best action by one-step lookahead
@@ -43,10 +41,10 @@ def policy_improvement(env, policy, policy_eval, gamma=1):
         for action in range(env.n_actions):
             env.state = s
             s_1, reward, done = env.step(action)
-            action_values[action] += env.p(s_1, s, action) * (reward + (gamma * V[s_1]))
+            action_values[action] += env.p(s_1, s, action) * (reward + (gamma * value[s_1]))
 
         best_action = np.argmax(action_values)
-        improved_policy[s] = best_action
+        policy[s] = best_action
 
     return improved_policy
 

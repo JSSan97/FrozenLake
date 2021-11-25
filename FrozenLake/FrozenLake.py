@@ -66,17 +66,6 @@ class FrozenLake(Environment):
             else:
                 return 0
 
-        # ## Check if walls nearby.
-        # walls = 0
-        # if current_position_x == 0:
-        #     walls += 1
-        # if current_position_x == self.lake_columns - 1:
-        #     walls += 1
-        # if current_position_y == 0:
-        #     walls += 1
-        # if current_position_y == self.lake_rows - 1:
-        #     walls += 1
-
         # When you intend to hit a wall
         after_moving_position_x = current_position_x + self.action_state_difference.get(action).get('x')
         after_moving_position_y = current_position_y + self.action_state_difference.get(action).get('y')
@@ -103,12 +92,17 @@ class FrozenLake(Environment):
                         ## If I can't go to the state because I hit a wall, the slip chance goes for the state I am on.
                         p += (self.slip / (self.n_actions))
 
-                # If I am able to go to the state, no walls are hit, add the 'additional slip chance
+                # If I am able to go to the state, no walls are hit, add the 'additional slip chance'
                 if next_state_position_x == after_moving_position_x and \
                         next_state_position_y == after_moving_position_y:
 
                     p += (self.slip / (self.n_actions))
 
+        return p
+
+    def p_transitions(self, next_state, state, action):
+        load_npy_file
+        p = 0
         return p
 
     def r(self, next_state, state, action):
