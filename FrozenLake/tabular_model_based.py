@@ -14,9 +14,6 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
         # For every state, look ahead one step at each possible action and next state
         for s in range(env.n_states):
             v = 0
-            # We would usually have a loop of all actions and probabilities but in grid world
-            # there is only 1 action with 100% probability leading to a state (we are using deterministic policy)
-
             for s_1 in range(env.n_states):
                 env.state = s
                 probability = env.p(s_1, s, policy[s])
@@ -54,7 +51,6 @@ def policy_improvement(env, policy, value, gamma=1):
 
 def policy_iteration(env, gamma, theta, max_iterations):
     policy = np.zeros(env.n_states, dtype=int)
-    value = np.zeros(env.n_states, dtype=float)
 
     current_iterations = 0
     value = policy_evaluation(env, policy, gamma, theta, max_iterations)
@@ -62,7 +58,6 @@ def policy_iteration(env, gamma, theta, max_iterations):
         policy = policy_improvement(env, policy, value, gamma)
         value = policy_evaluation(env, policy, gamma, theta, max_iterations)
         current_iterations += 1
-
 
     return policy, value
 
