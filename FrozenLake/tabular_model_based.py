@@ -71,11 +71,10 @@ def value_iteration(env, gamma, theta, max_iterations):
         # Get best action
         action_values = np.zeros(env.n_actions)
         for action in range(env.n_actions):
-            # s_1, reward, done = env.step(action)
             for next_state in range(env.n_states):
                 env.state = state
                 reward = env.r(next_state, state, action)
-                action_values[action] += env.p_transitions(next_state, state, action) * (reward + (gamma * V[next_state]))
+                action_values[action] += env.p(next_state, state, action) * (reward + (gamma * V[next_state]))
 
         return action_values
 
