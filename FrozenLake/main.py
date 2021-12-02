@@ -1,7 +1,7 @@
 from utils import play, load_npy_file
 from FrozenLake import FrozenLake
 from tabular_model_based import policy_iteration, value_iteration
-from tabular_model_free_based import sarsa
+from tabular_model_free_based import sarsa, q_learning
 
 ################ Main function ################
 def main():
@@ -46,6 +46,13 @@ def main():
     print('## Sarsa')
     policy, value = sarsa(env, max_episodes, eta, gamma, epsilon, seed=seed)
     env.render(policy, value)
+
+    print('')
+    print('## Q-learning')
+    policy, value = q_learning(env, max_episodes, eta, gamma, epsilon, seed=seed)
+    env.render(policy, value)
+
+    print('')
 
 
 

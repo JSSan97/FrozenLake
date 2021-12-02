@@ -51,6 +51,12 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
     for i in range(max_episodes):
         s = env.reset()
         # TODO:
+        # While s is not terminal
+        while s != env.absorbing_state:
+            action = epsilon_greedy_policy(env, s, epsilon[i], q)
+            next_state, reward, done = env.step(action)
+            q[s][action] = q[s][action] + (eta[i] * (reward + (gamma*np.max(q[next_state])) - q[s][action]))
+            s = next_state
 
     policy = q.argmax(axis=1)
     value = q.max(axis=1)
