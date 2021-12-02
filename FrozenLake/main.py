@@ -1,6 +1,7 @@
 from utils import play, load_npy_file
 from FrozenLake import FrozenLake
 from tabular_model_based import policy_iteration, value_iteration
+from tabular_model_free_based import sarsa
 
 ################ Main function ################
 def main():
@@ -32,6 +33,22 @@ def main():
     print('## Value iteration')
     policy, value = value_iteration(env, gamma, theta, max_iterations)
     env.render(policy, value)
+
+    print('')
+
+    print('# Model-Free algorithms')
+    gamma = 0.90
+    max_episodes = 2000
+    eta = 0.5
+    epsilon = 0.5
+
+    print('')
+    print('## Sarsa')
+    policy, value = sarsa(env, max_episodes, eta, gamma, epsilon, seed=seed)
+    env.render(policy, value)
+
+
+
 
     # print('')
     # print('## Numpy file')
