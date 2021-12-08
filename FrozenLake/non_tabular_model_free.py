@@ -57,14 +57,14 @@ def linear_q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
         done = False
         while not done:
             action = epsilon_greedy_policy(env, epsilon[i], q)
-            next_state, reward, done = env.step(action)
+            next_state_features, reward, done = env.step(action)
             delta = reward - q[action]
 
-            q = next_state.dot(theta)
+            q = next_state_features.dot(theta)
 
             delta = delta + (gamma * np.max(q))
             theta = theta + (eta[i] * delta * features[action])
-            features = next_state
+            features = next_state_features
 
     return theta
 
