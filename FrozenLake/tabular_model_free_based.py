@@ -1,16 +1,16 @@
 import numpy as np
 
 def epsilon_greedy_policy(env, state, epsilon, q):
-    if np.random.uniform(0, 1) < epsilon:
-        action = np.random.randint(0, env.n_actions)
-    else:
+    if np.random.uniform(0, 1) < 1 - epsilon:
         # Greedily choose best action from Q
         # Need to break ties here...
-        if not np.any(q[state]):
-            # All equal to zero
+        ties = np.all(q[state] == q[state][0])
+        if ties:
             action = np.random.randint(0, env.n_actions)
         else:
             action = np.argmax(q[state])
+    else:
+        action = np.random.randint(0, env.n_actions)
 
     return action
 
