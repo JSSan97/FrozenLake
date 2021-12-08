@@ -25,10 +25,10 @@ def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
 
     for i in range(max_episodes):
         s = env.reset()
-        # TODO:
         action = epsilon_greedy_policy(env, s, epsilon[i], q)
         # While s is not terminal
-        while s != env.absorbing_state:
+        done = False
+        while not done:
             next_state, reward, done = env.step(action)
             next_action = epsilon_greedy_policy(env, next_state, epsilon[i], q)
             q[s][action] = q[s][action] + (eta[i] * (reward + (gamma * q[next_state][next_action]) - q[s][action]))
@@ -50,9 +50,8 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
 
     for i in range(max_episodes):
         s = env.reset()
-        # TODO:
-        # While s is not terminal
-        while s != env.absorbing_state:
+        done = False
+        while not done:
             action = epsilon_greedy_policy(env, s, epsilon[i], q)
             next_state, reward, done = env.step(action)
             q[s][action] = q[s][action] + (eta[i] * (reward + (gamma*np.max(q[next_state])) - q[s][action]))
