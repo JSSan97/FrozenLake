@@ -2,6 +2,7 @@ from utils import play, load_npy_file
 from FrozenLake import FrozenLake
 from tabular_model_based import policy_iteration, value_iteration
 from tabular_model_free_based import sarsa, q_learning
+from non_tabular_model_free import LinearWrapper, linear_sarsa, linear_q_learning
 
 ################ Main function ################
 def main():
@@ -53,6 +54,18 @@ def main():
     env.render(policy, value)
 
     print('')
+    linear_env = LinearWrapper(env)
+    # print('## Linear Sarsa')
+    #
+    # parameters = linear_sarsa(linear_env, max_episodes, eta, gamma, epsilon, seed=seed)
+    # policy, value = linear_env.decode_policy(parameters)
+    # linear_env.render(policy, value)
+
+    print('')
+    print('## Linear Q-Learning')
+    parameters = linear_q_learning(linear_env, max_episodes, eta, gamma, epsilon, seed=seed)
+    policy, value = linear_env.decode_policy(parameters)
+    linear_env.render(policy, value)
 
 
 
