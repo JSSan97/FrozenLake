@@ -51,7 +51,6 @@ def linear_q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
     q = np.zeros(env.n_actions)
     for i in range(max_episodes):
         features = env.reset()
-        # TODO:
         q = features.dot(theta)
 
         done = False
