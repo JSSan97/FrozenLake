@@ -81,13 +81,12 @@ def linear_sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
         q = features.dot(theta)
         action = epsilon_greedy_policy(env, epsilon[i], q)
         done = False
-        # TODO: Probably not correct solution. Should be fixed.
+
         while not done:
             next_state_features, reward, done = env.step(action)
-            next_action = epsilon_greedy_policy(env, epsilon[i], q)
-
             current_q = q
             q = next_state_features.dot(theta)
+            next_action = epsilon_greedy_policy(env, epsilon[i], q)
 
             delta = reward + (gamma * q[next_action] - current_q[action])
             theta = theta + (eta[i] * delta * features[action])
