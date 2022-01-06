@@ -34,7 +34,6 @@ def policy_improvement(env, policy, value, gamma=1):
     improved_policy = policy
 
     for s in range(env.n_states):
-        # Find the best action by one-step lookahead
         action_values = np.zeros(env.n_actions)
 
         for action in range(env.n_actions):
