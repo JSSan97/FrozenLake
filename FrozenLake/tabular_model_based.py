@@ -44,7 +44,7 @@ def policy_improvement(env, policy, value, gamma=1):
                 action_values[action] += probability * (reward + (gamma * value[next_state]))
 
             best_action = np.argmax(action_values)
-            policy[s] = best_action
+            improved_policy[s] = best_action
 
     return improved_policy
 
