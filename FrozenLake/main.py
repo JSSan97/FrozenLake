@@ -23,7 +23,7 @@ def main():
             ['.', '#', '.', '.', '#', '.', '#', '.'],
             ['.', '.', '.', '#', '.', '.', '.', '$']]
 
-    env = FrozenLake(lake, slip=0.1, max_steps=16, seed=seed)
+    env = FrozenLake(lake, slip=0.1, max_steps=64, seed=seed)
     env.reset()
     # play(env)
 
