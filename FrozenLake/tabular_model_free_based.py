@@ -46,13 +46,14 @@ def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
             s = next_state
             action = next_action
 
-        val = policy_evaluation(env, q.argmax(axis=1), gamma, 0.001, 100)
-        if np.array_equal(val, optimal_val) & np.array_equal(q.argmax(axis=1), expected) & (not printed):
-            print("val: {}".format(val))
-            print("optimal_val: {}".format(optimal_val))
-            print("policy: {}".format(q.argmax(axis=1)))
-            print("sarsa episode optimal {}".format(i))
-            printed = True
+        if np.array_equal(q.argmax(axis=1), expected):
+            val = policy_evaluation(env, q.argmax(axis=1), gamma, 0.001, 100)
+            if np.array_equal(val, optimal_val) & (not printed):
+                print("val: {}".format(val))
+                print("optimal_val: {}".format(optimal_val))
+                print("policy: {}".format(q.argmax(axis=1)))
+                print("sarsa episode optimal {}".format(i))
+                printed = True
 
     policy = q.argmax(axis=1)
     value = q.max(axis=1)
@@ -87,13 +88,14 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
             q[s][action] = q[s][action] + (eta[i] * (reward + (gamma*np.max(q[next_state])) - q[s][action]))
             s = next_state
 
-        val = policy_evaluation(env, q.argmax(axis=1), gamma, 0.001, 100)
-        if np.array_equal(val, optimal_val) & np.array_equal(q.argmax(axis=1), expected) & (not printed):
-            print("val: {}".format(val))
-            print("optimal_val: {}".format(optimal_val))
-            print("policy: {}".format(q.argmax(axis=1)))
-            print("q learning episode optimal {}".format(i))
-            printed = True
+        if np.array_equal(q.argmax(axis=1), expected):
+            val = policy_evaluation(env, q.argmax(axis=1), gamma, 0.001, 100)
+            if np.array_equal(val, optimal_val) & (not printed):
+                print("val: {}".format(val))
+                print("optimal_val: {}".format(optimal_val))
+                print("policy: {}".format(q.argmax(axis=1)))
+                print("q learning episode optimal {}".format(i))
+                printed = True
 
     policy = q.argmax(axis=1)
     value = q.max(axis=1)
