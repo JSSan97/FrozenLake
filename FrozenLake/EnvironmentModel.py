@@ -14,7 +14,9 @@ class EnvironmentModel:
 
     def draw(self, state, action):
         p = [self.p(ns, state, action) for ns in range(self.n_states)]
-        next_state = self.random_state.choice(self.n_states, p=p)
+        p = np.array(p)
+        p_norm = p / sum(p) # normalised for ValueError: probabilities do not sum to 1
+        next_state = self.random_state.choice(self.n_states, p=p_norm)
         reward = self.r(next_state, state, action)
 
         return next_state, reward

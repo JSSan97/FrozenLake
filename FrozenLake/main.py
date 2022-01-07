@@ -9,37 +9,46 @@ def main():
     seed = 0
 
     # Small lake
-    lake = [['&', '.', '.', '.'],
-            ['.', '#', '.', '#'],
-            ['.', '.', '.', '#'],
-            ['#', '.', '.', '$']]
+    # lake = [['&', '.', '.', '.'],
+    #         ['.', '#', '.', '#'],
+    #         ['.', '.', '.', '#'],
+    #         ['#', '.', '.', '$']]
+
+    lake = [['&', '.', '.', '.', '.', '.', '.', '.'],
+            ['.', '.', '.', '.', '.', '.', '.', '.'],
+            ['.', '.', '.', '#', '.', '.', '.', '.'],
+            ['.', '.', '.', '.', '.', '#', '.', '.'],
+            ['.', '.', '.', '#', '.', '.', '.', '.'],
+            ['.', '#', '#', '.', '.', '.', '#', '.'],
+            ['.', '#', '.', '.', '#', '.', '#', '.'],
+            ['.', '.', '.', '#', '.', '.', '.', '$']]
 
     env = FrozenLake(lake, slip=0.1, max_steps=16, seed=seed)
     env.reset()
     # play(env)
 
-    print('# Model-based algorithms')
+    # print('# Model-based algorithms')
+    # gamma = 0.90
+    # theta = 0.001
+    # max_iterations = 100
+    #
+    # print('')
+    #
+    # print('## Policy iteration')
+    # policy, value = policy_iteration(env, gamma, theta, max_iterations)
+    # env.render(policy, value)
+    #
+    # print('')
+    #
+    # print('## Value iteration')
+    # policy, value = value_iteration(env, gamma, theta, max_iterations)
+    # env.render(policy, value)
+    #
+    # print('')
+    #
+    # print('# Model-Free algorithms')
     gamma = 0.90
-    theta = 0.001
-    max_iterations = 100
-
-    print('')
-
-    print('## Policy iteration')
-    policy, value = policy_iteration(env, gamma, theta, max_iterations)
-    env.render(policy, value)
-
-    print('')
-
-    print('## Value iteration')
-    policy, value = value_iteration(env, gamma, theta, max_iterations)
-    env.render(policy, value)
-
-    print('')
-
-    print('# Model-Free algorithms')
-    gamma = 0.90
-    max_episodes = 2000
+    max_episodes = 10000
     eta = 0.5
     epsilon = 0.5
 
@@ -53,19 +62,19 @@ def main():
     policy, value = q_learning(env, max_episodes, eta, gamma, epsilon, seed=seed)
     env.render(policy, value)
 
-    print('')
-    linear_env = LinearWrapper(env)
-    print('## Linear Sarsa')
-
-    parameters = linear_sarsa(linear_env, max_episodes, eta, gamma, epsilon, seed=seed)
-    policy, value = linear_env.decode_policy(parameters)
-    linear_env.render(policy, value)
-
-    print('')
-    print('## Linear Q-Learning')
-    parameters = linear_q_learning(linear_env, max_episodes, eta, gamma, epsilon, seed=seed)
-    policy, value = linear_env.decode_policy(parameters)
-    linear_env.render(policy, value)
+    # print('')
+    # linear_env = LinearWrapper(env)
+    # print('## Linear Sarsa')
+    #
+    # parameters = linear_sarsa(linear_env, max_episodes, eta, gamma, epsilon, seed=seed)
+    # policy, value = linear_env.decode_policy(parameters)
+    # linear_env.render(policy, value)
+    #
+    # print('')
+    # print('## Linear Q-Learning')
+    # parameters = linear_q_learning(linear_env, max_episodes, eta, gamma, epsilon, seed=seed)
+    # policy, value = linear_env.decode_policy(parameters)
+    # linear_env.render(policy, value)
 
 
 
