@@ -23,7 +23,7 @@ def main():
             ['.', '#', '.', '.', '#', '.', '#', '.'],
             ['.', '.', '.', '#', '.', '.', '.', '$']]
 
-    env = FrozenLake(lake, slip=0.1, max_steps=16, seed=seed)
+    env = FrozenLake(lake, slip=0.1, max_steps=64, seed=seed)
     env.reset()
     # play(env)
 
@@ -45,11 +45,11 @@ def main():
     # env.render(policy, value)
     #
     # print('')
-    #
-    # print('# Model-Free algorithms')
+
+    print('# Model-Free algorithms')
     gamma = 0.90
-    max_episodes = 10000
-    eta = 0.5
+    max_episodes = 50000
+    eta = 0.9
     epsilon = 0.5
 
     print('')
