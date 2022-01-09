@@ -14,9 +14,15 @@ class EnvironmentModel:
 
     def draw(self, state, action):
         p = [self.p(ns, state, action) for ns in range(self.n_states)]
+        # # REPORT SECTION for big lake
         p = np.array(p)
-        p_norm = p / sum(p) # normalised for ValueError: probabilities do not sum to 1
-        next_state = self.random_state.choice(self.n_states, p=p_norm)
+        # p_norm = p / sum(p) # normalised for ValueError: probabilities do not sum to 1
+        # next_state = self.random_state.choice(self.n_states, p=p_norm)
+        if(state == 56):
+            print(action)
+            print(p)
+
+        next_state = self.random_state.choice(self.n_states, p=p)
         reward = self.r(next_state, state, action)
 
         return next_state, reward

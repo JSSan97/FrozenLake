@@ -52,10 +52,19 @@ def policy_iteration(env, gamma, theta, max_iterations):
 
     current_iterations = 0
     value = policy_evaluation(env, policy, gamma, theta, max_iterations)
+
+    # REPORT SECTION: big lake
+    # expected = np.array([3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 2, 2, 3, 2, 2, 0, 3, 3, 3, 2, 3, 3, 3, 3, 2, 0, 3, 2,
+    #                      0, 0, 0, 0, 3, 3, 3, 2, 0, 0, 0, 3, 3, 2, 0, 2, 2, 0, 3, 0, 0, 2, 0, 2, 3, 3, 0, 0, 3, 3, 3, 0, 0])
+
     while current_iterations < max_iterations:
         policy = policy_improvement(env, policy, value, gamma)
-        value = policy_evaluation(env, policy, gamma, theta, max_iterations)
+        value = policy_evaluation(env, policy, gamma, theta, max_iterations=100)
         current_iterations += 1
+
+        # REPORT SECTION: Check optimal policy
+        # if(np.array_equal(expected, policy)):
+        #     print(current_iterations)
 
     return policy, value
 
@@ -63,6 +72,11 @@ def value_iteration(env, gamma, theta, max_iterations):
     policy = np.zeros(env.n_states, dtype=int)
     value = np.zeros(env.n_states, dtype=float)
     current_iterations = 0
+
+    # Big Lake
+    # REPORT SECTION: Use this to check when we get the optimal policy
+    # expected = np.array([3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 2, 2, 3, 2, 2, 0, 3, 3, 3, 2, 3, 3, 3, 3, 2, 0, 3, 2,
+    #                      0, 0, 0, 0, 3, 3, 3, 2, 0, 0, 0, 3, 3, 2, 0, 2, 2, 0, 3, 0, 0, 2, 0, 2, 3, 3, 0, 0, 3, 3, 3, 0, 0])
 
     def get_action_values(state, V):
         # Get best action
@@ -90,9 +104,20 @@ def value_iteration(env, gamma, theta, max_iterations):
             break
         current_iterations += 1
 
+        # # REPORT SECTION: Use this to check when we get the optimal policy
+        # for s in range(env.n_states):
+        #     action_values = get_action_values(s, value)
+        #     best_action = np.argmax(action_values)
+        #     policy[s] = best_action
+        # if (np.array_equal(expected, policy)):
+        #     print(current_iterations)
+
     for s in range(env.n_states):
         action_values = get_action_values(s, value)
         best_action = np.argmax(action_values)
         policy[s] = best_action
+
+
+
 
     return policy, value

@@ -24,14 +24,15 @@ def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
 
     q = np.zeros((env.n_states, env.n_actions))
 
-    # small lake
+    # # REPORT SECTION: Q5) Big lake
+    # # Small lake
     # expected = np.array([2, 3, 2, 1, 2, 0, 2, 0, 3, 2, 2, 0, 0, 3, 3, 0, 0])
 
-    # big lake
-    expected = np.array([3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 2, 2, 3, 2, 2, 0, 3, 3, 3, 2, 3, 3, 3, 3, 2, 0, 3, 2,
-                         0, 0, 0, 0, 3, 3, 3, 2, 0, 0, 0, 3, 3, 2, 0, 2, 2, 0, 3, 0, 0, 2, 0, 2, 3, 3, 0, 0, 3, 3, 3, 0, 0])
+    # # Big Lake
+    # expected = np.array([3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 2, 2, 3, 2, 2, 0, 3, 3, 3, 2, 3, 3, 3, 3, 2, 0, 3, 2,
+    #                      0, 0, 0, 0, 3, 3, 3, 2, 0, 0, 0, 3, 3, 2, 0, 2, 2, 0, 3, 0, 0, 2, 0, 2, 3, 3, 0, 0, 3, 3, 3, 0, 0])
 
-    optimal_val = policy_evaluation(env, expected, gamma, 0.001, 100)
+    # optimal_val = policy_evaluation(env, expected, gamma, 0.001, 100)
 
     printed = False
     for i in range(max_episodes):
@@ -46,14 +47,15 @@ def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
             s = next_state
             action = next_action
 
-        if np.array_equal(q.argmax(axis=1), expected):
-            val = policy_evaluation(env, q.argmax(axis=1), gamma, 0.001, 100)
-            if np.array_equal(val, optimal_val) & (not printed):
-                print("val: {}".format(val))
-                print("optimal_val: {}".format(optimal_val))
-                print("policy: {}".format(q.argmax(axis=1)))
-                print("sarsa episode optimal {}".format(i))
-                printed = True
+        # REPORT SECTION: Q5) Check Optimal Policy
+        # if np.array_equal(q.argmax(axis=1), expected):
+        #     val = policy_evaluation(env, q.argmax(axis=1), gamma, 0.001, 100)
+        #     if np.array_equal(val, optimal_val) & (not printed):
+        #         print("val: {}".format(val))
+        #         print("optimal_val: {}".format(optimal_val))
+        #         print("policy: {}".format(q.argmax(axis=1)))
+        #         print("sarsa episode optimal {}".format(i))
+        #         printed = True
 
     policy = q.argmax(axis=1)
     value = q.max(axis=1)
@@ -68,16 +70,15 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
 
     q = np.zeros((env.n_states, env.n_actions))
 
-    # small lake
+    # REPORT SECTION: small lake
     # expected = np.array([2, 3, 2, 1, 2, 0, 2, 0, 3, 2, 2, 0, 0, 3, 3, 0, 0])
 
-    # big lake
-    expected = np.array([3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 2, 2, 3, 2, 2, 0, 3, 3, 3, 2, 3, 3, 3, 3, 2, 0, 3, 2,
-                         0, 0, 0, 0, 3, 3, 3, 2, 0, 0, 0, 3, 3, 2, 0, 2, 2, 0, 3, 0, 0, 2, 0, 2, 3, 3, 0, 0, 3, 3, 3, 0, 0])
-
-    optimal_val = policy_evaluation(env, expected, gamma, 0.001, 100)
-
-    printed = False
+    # # REPORT SECTION: big lake
+    # expected = np.array([3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 2, 2, 3, 2, 2, 0, 3, 3, 3, 2, 3, 3, 3, 3, 2, 0, 3, 2,
+    #                      0, 0, 0, 0, 3, 3, 3, 2, 0, 0, 0, 3, 3, 2, 0, 2, 2, 0, 3, 0, 0, 2, 0, 2, 3, 3, 0, 0, 3, 3, 3, 0, 0])
+    #
+    # optimal_val = policy_evaluation(env, expected, gamma, 0.001, 100)
+    # printed = False
 
     for i in range(max_episodes):
         s = env.reset()
@@ -88,14 +89,15 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
             q[s][action] = q[s][action] + (eta[i] * (reward + (gamma*np.max(q[next_state])) - q[s][action]))
             s = next_state
 
-        if np.array_equal(q.argmax(axis=1), expected):
-            val = policy_evaluation(env, q.argmax(axis=1), gamma, 0.001, 100)
-            if np.array_equal(val, optimal_val) & (not printed):
-                print("val: {}".format(val))
-                print("optimal_val: {}".format(optimal_val))
-                print("policy: {}".format(q.argmax(axis=1)))
-                print("q learning episode optimal {}".format(i))
-                printed = True
+        # REPORT SECTION: Q5) Check Optimal Policy
+        # if np.array_equal(q.argmax(axis=1), expected):
+        #     val = policy_evaluation(env, q.argmax(axis=1), gamma, 0.001, 100)
+        #     if np.array_equal(val, optimal_val) & (not printed):
+        #         print("val: {}".format(val))
+        #         print("optimal_val: {}".format(optimal_val))
+        #         print("policy: {}".format(q.argmax(axis=1)))
+        #         print("q learning episode optimal {}".format(i))
+        #         printed = True
 
     policy = q.argmax(axis=1)
     value = q.max(axis=1)

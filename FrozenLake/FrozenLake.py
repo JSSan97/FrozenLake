@@ -98,7 +98,7 @@ class FrozenLake(Environment):
 
                     p += (self.slip / (self.n_actions))
 
-        return p
+        return np.round(p, decimals=3)
 
     def p_transitions(self, next_state, state, action):
         # Use this instead of P if we think our transitions are wrong.
