@@ -76,8 +76,8 @@ class FrozenLake(Environment):
 
         if next_state_position_x == after_moving_position_x and \
                 next_state_position_y == after_moving_position_y:
-            p = (1 - self.slip)
-
+            if(next_state != self.absorbing_state):
+                p = (1 - self.slip)
 
         ## The environment has a chance of ignoring the desired direction and the agent slips (move a random direction)
         ## Check all directions to see if the next state is adjacent to the current state, regardless of action

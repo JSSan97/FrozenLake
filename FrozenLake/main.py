@@ -27,7 +27,7 @@ def main():
     env = FrozenLake(lake, slip=0.1, max_steps=64, seed=seed)
 
     env.reset()
-    play(env)
+    # play(env)
 
     print('# Model-based algorithms')
     gamma = 0.90
@@ -36,15 +36,15 @@ def main():
 
     print('')
 
-    # print('## Policy iteration')
-    # policy, value = policy_iteration(env, gamma, theta, max_iterations)
-    # env.render(policy, value)
-    #
-    # print('')
-    #
-    # print('## Value iteration')
-    # policy, value = value_iteration(env, gamma, theta, max_iterations)
-    # env.render(policy, value)
+    print('## Policy iteration')
+    policy, value = policy_iteration(env, gamma, theta, max_iterations)
+    env.render(policy, value)
+
+    print('')
+
+    print('## Value iteration')
+    policy, value = value_iteration(env, gamma, theta, max_iterations)
+    env.render(policy, value)
 
     print('')
 
